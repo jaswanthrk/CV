@@ -813,6 +813,86 @@ cv2.destroyAllWindows()
 import cv2
 import numpy as np
 
+def get_contours_area(contours):
+    all_areas = []
+    for cnt in contours:
+           area = cv2.contourArea(cnt)
+           all_areas.append(area)
+    return all_areas
+
+image = cv2.imread('')
+original_image = image
+
+print("COntour Areas before sorting.")
+print(get_contour_areas(contours))
+           
+for c in sorted_contours:
+    cv2.drawContours(original_image, [c], -1, (255,0,0), 3)
+    cv2.waitKey()
+    cv2.imshow('Contours by Area', orignal_image)
+                      
+
+cv2.waitKey()
+cv2.destroyAllWindows()
+           
+           
+
+           
+           
+           
+           
+           
+           
+import cv2
+import numpy as np
+
+           
+def x_cord_contour(contours):
+    # Returns the X coordinate for the contour centroid
+    if cv2.contourArea(contours) > 10:
+        M = cv2.moments(contours)
+        return int(M['m10']/M['m00'])
+                            
+def label_contour_center(image, c):
+    # Places a red circle on the centres of the contours
+    M = cv2.moments(c)
+    cx = int(M['m10']/M['m00'])
+    cy = int(M['m01']/M['m00'])
+    
+    cv2.circle(image, (cx, cy), 10, (0,0,255), -1)
+    return image
+           
+image = cv2.imread('')
+original_image = image.copy()
+        
+for (i,c) in enumerate(contours):
+    orig = label_contour_center(image, c)
+
+cv2.imshow("4 - Contour Centers", image)
+cv2.waitKey()
+
+contours_left_to_right = sorted(contours, key = x_cord_contour, reverse = False)
+
+# Labeling Contours Left to Right
+for (i,c) in enumerate(contours_left_to_right):
+    cv2.drawContours(original_image, [c], -1, (0,0,255), 3)
+    M = cv2.moments(c)
+    cx = int(M['m10']/M['m00'])
+    cy = int(M['m01']/M['m00'])
+    cv2.putText(original_image, str(i+1), (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    cv2.imshow('6 - Left to Right Contour', original_image)
+    cv2.waitKey()
+    (x, y, w, h) = cv2.boundingRect(c)
+           
+    # Let's now crop each contour and save these images
+    cropped_contour = original_image[y:y+h, x:x+w]
+    image_name = "output_shape_number" + str(i+1) + ".jpg"
+    print(image_name)
+    cv2.imwrite(image_name, cropped_contour)
+
+cv2.destroyAllWindows()
+
+
 
 
 
