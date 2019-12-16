@@ -705,10 +705,117 @@ cv2.waitKey()
 
 
 
+########################################################################
+########################################################################
+########################################################################
+
+############### MINI PROJECT #1 - LIVE SKETCH USING WEBCAM
+
+import cv2
+import numpy as np
+
+def sketch(image):
+    img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    img_gray_blur = cv2.GaussianBlur(img_gray, (5,5), 0)
+    canny_edges = cv2.Canny(img_gray_blur, 10, 70)
+    ret, mask = cv2.threshold(canny_edges, 70, 255, cv2.THRESH_BINARY_INV)
+    return mask
+           
+           
+           
+# Initialize  webcam, cap is the object provided by VideoCapture
+# It contains a boolean indicating if it was succesful (ret)
+# It also contains the images collected from the webcam (frame)
+cap = cv2.VideoCapture()
+           
+while True :
+    ret, frame = cap.read()
+    cv2.imshow('Our Live Sketcher', sketch(frame))
+    if cv2.waitKey(1) == 13: #13 is the Enter Key
+        break;
+           
+# Release camera and close windows
+cap.release()
+cv2.destroyAllWindows()
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+########################################################################
+########################################################################
+########################################################################
+
+############### SECTION IV : IMAGE SEGMENTATION
+           
+# CONTOURS ARE VERY IMPORTANT IN : (A) OBJECT DETECTION (B) SHAPE ANALYSIS
+           
+           
+           
+import cv2
+import numpy as np
+           
+image = cv2.imread('')
+cv2.imshow('Input Image', image)
+cv2.waitKey()           
+           
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)           
+edged = cv2.Canny(gray, 30, 200)           
+cv2.imshow('Canny Edges', edged)
+cv2.waitKey()           
+           
+# Finding contours; Use a copy of your image e.g. edged.copy(), since findContours alters the image
+contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+           
+# cv2.findContours(image, Retrieval Mode, Approximated Method)
+# Approximation Methods : cv2.CHAIN_APPROX_NONE - stores all the boundary points.
+           # cv2.CHAIN_APPROX_SIMPLE - only start and end points of bounding contours
+# HIERARCHY TYPES : THE FIRST TWO ARE THE MOST USEFUL
+           # cv2.RETR_LIST - RETRIEVES ALL CONTOURS
+           # cv2.RETR_EXTERNAL - RETRIEVES EXTERNAL OR OUTER CONTOURS ONLY
+           # cv2.RETR_COMP - RETRIEVES ALL IN A 2-LEVEL HIERARCHY
+           # cv2.RETR_TREE - RETRIES ALL IN FULL HIERARCHY
+           # STORED IN FORMAT : [NEXT, PREVIOUS, FIRST CHILD, PARENT]
+# print(contours)
+cv2.imshow('Canny Edges after Contouring', edged)
+cv2.waitKey()
+           
+print("Number of Contours found = " + str(len(contours)))
+           
+# Draw all contours. Use '-1' as the 3rd parameter to draw all.
+           
+cv2.drawContours(image, contours, -1, (0, 255, 0), 3)
+           
+cv2.imshow("Contours", image)           
+cv2.waitKey()
+cv2.destroyAllWindows() 
+           
+           
+##################################################
+
+##### SORTING CONTOURS :
+           # SORTING BY AREA : can assist in Object Recognition (using contour area)
+               # Eliminate small contours that may be noise. Extract the largest contour.
+           # SORTING BY SPATIAL POSITION : (using the contour centroid)
+               # Sort characters left to right. Process images in specific order.
+           
+import cv2
+import numpy as np
 
 
 
 
 
 
- 
+
